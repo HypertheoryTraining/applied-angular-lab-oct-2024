@@ -14,7 +14,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [ReactiveFormsModule],
-  providers: [HouseRatingStore],
+  providers: [],
   template: `
     @if(false) {
     <p>We are saving your new house rating!</p>

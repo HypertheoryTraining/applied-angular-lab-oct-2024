@@ -1,15 +1,23 @@
 import { updateState, withDevtools } from '@angular-architects/ngrx-toolkit';
 import { HttpErrorResponse } from '@angular/common/http';
-import { computed, inject } from '@angular/core';
+import { computed, inject, Signal } from '@angular/core';
 import { tapResponse } from '@ngrx/operators';
 import {
+  getState,
   patchState,
   signalStore,
   withComputed,
   withHooks,
   withMethods,
 } from '@ngrx/signals';
-import { addEntity, setEntities, withEntities } from '@ngrx/signals/entities';
+import {
+  addEntity,
+  removeEntity,
+  setEntities,
+  setEntity,
+  updateEntity,
+  withEntities,
+} from '@ngrx/signals/entities';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import {
   setError,
@@ -17,7 +25,7 @@ import {
   setPending,
   withRequestStatus,
 } from '@shared/request-status.feature';
-import { map, mergeMap, pipe, tap } from 'rxjs';
+import { map, mergeMap, Observable, pipe, tap, withLatestFrom } from 'rxjs';
 import {
   HouseListEntity,
   HouseRatingEntry,
@@ -27,6 +35,9 @@ import { RatingsService } from '../services/ratings.service';
 import { getTotalScore } from '../pages/house-rating/utils';
 import { HousePendingStore } from './house-pending.store';
 import { HouseSortAndFilterStore } from './sort-and-filter.store';
+import { HouseRatingStore } from '../pages/house-rating/house-rating.store';
+import { toObservable } from '@angular/core/rxjs-interop';
+import { boolean } from 'zod';
 
 export const HouseListStore = signalStore(
   withDevtools('house-list'),
@@ -38,7 +49,12 @@ export const HouseListStore = signalStore(
     return {
       getHouseListModel: computed(() => {
         const combined = [
-          ...store.entities(),
+          ...store
+            .entities()
+            .filter(
+              (h) =>
+                !pendingStore.getHouseListModel().some((ph) => ph.id === h.id)
+            ),
           ...pendingStore.getHouseListModel(),
         ];
         let filtered = [
@@ -89,11 +105,11 @@ export const HouseListStore = signalStore(
           )
         )
       ),
-      add: rxMethod<HouseRatingEntry>(
+      add: rxMethod<HouseListEntity>(
         pipe(
           map((h) => {
             const tempId = crypto.randomUUID();
-            return [h, tempId] as [HouseRatingEntry, string];
+            return [h, tempId] as [HouseListEntity, string];
           }),
           tap(() => patchState(store, setPending())),
           tap(([h, id]) => {
@@ -111,10 +127,66 @@ export const HouseListStore = signalStore(
                   );
                   pendingStore.removeHouse(tempId);
                 },
-                error: (e: HttpErrorResponse) =>
+                error: (e: HttpErrorResponse) => {
+                  pendingStore.removeHouse(h.id);
                   patchState(
                     store,
                     setError(`Error - couldn't add house ${e.error}`)
+                  );
+                },
+              })
+            )
+          )
+        )
+      ),
+      renovate: rxMethod<HouseListEntity>(
+        pipe(
+          tap((h) => patchState(store, setPending())),
+          tap((h) => {
+            pendingStore.addHouse(h);
+          }),
+          mergeMap((h) =>
+            service.renovateHouse(h).pipe(
+              tapResponse({
+                next: (h) => {
+                  updateState(
+                    store,
+                    'renovating from api',
+                    updateEntity({ id: h.id, changes: () => h }),
+                    setFulfilled()
+                  );
+                  pendingStore.removeHouse(h.id);
+                },
+                error: (e: HttpErrorResponse) => {
+                  pendingStore.removeHouse(h.id);
+                  patchState(
+                    store,
+                    setError(`Error - couldn't renovate house ${e.error}`)
+                  );
+                },
+              })
+            )
+          )
+        )
+      ),
+      delete: rxMethod<string>(
+        pipe(
+          tap(() => patchState(store, setPending())),
+          mergeMap((id) =>
+            service.deleteHouse(id).pipe(
+              tapResponse({
+                next: (h) => {
+                  updateState(
+                    store,
+                    'deleting from api',
+                    removeEntity(id),
+                    setFulfilled()
+                  );
+                },
+                error: (e: HttpErrorResponse) =>
+                  patchState(
+                    store,
+                    setError(`Error - couldn't renovate house ${e.error}`)
                   ),
               })
             )

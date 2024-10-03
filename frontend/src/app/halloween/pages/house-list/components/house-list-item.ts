@@ -29,8 +29,12 @@ import { RouterLink } from '@angular/router';
           @if(item().isPending) {
           <span class="loading loading-dots loading-md"></span>
           } @else {
-          <a [routerLink]="['edit', item().id]" class="btn btn-link">Edit</a>
-
+          <a [routerLink]="['renovate', item().id]" class="btn btn-link"
+            >Renovate</a
+          >
+          <a [routerLink]="['delete', item().id]" class="btn btn-link"
+            >Delete</a
+          >
           }
         </div>
       </div>

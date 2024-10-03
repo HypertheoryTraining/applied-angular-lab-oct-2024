@@ -7,9 +7,10 @@ import {
   withState,
 } from '@ngrx/signals';
 import { HouseListStore } from '../../stores/house-list.store';
-import { HouseRatingEntry } from './types';
+import { HouseListEntity, HouseRatingEntry } from './types';
 import { getTotalScore } from './utils';
-const initialState: HouseRatingEntry = {
+const initialState: HouseListEntity = {
+  id: '0',
   address: '',
   qualityRating: 0,
   quantityRating: 0,
@@ -23,13 +24,13 @@ export const HouseRatingStore = signalStore(
     const houseListStore = inject(HouseListStore);
     return {
       set(
-        key: keyof Omit<HouseRatingEntry, 'hasAmbiance' | 'hasFullSizeCandy'>,
+        key: keyof Omit<HouseListEntity, 'hasAmbiance' | 'hasFullSizeCandy'>,
         value: unknown
       ) {
         updateState(store, `changed ${key}`, { [key]: value });
       },
       toggle(
-        key: keyof Pick<HouseRatingEntry, 'hasAmbiance' | 'hasFullSizeCandy'>
+        key: keyof Pick<HouseListEntity, 'hasAmbiance' | 'hasFullSizeCandy'>
       ) {
         updateState(store, `toggled ${key}`, { [key]: !store[key]() });
       },
@@ -37,6 +38,12 @@ export const HouseRatingStore = signalStore(
         const h2 = getObjFromSignal(store as unknown as HouseRatingStore);
         houseListStore.add(h2);
         updateState(store, 'added house', initialState);
+      },
+      renovate() {
+        const h2 = getObjFromSignal(store as unknown as HouseRatingStore);
+        houseListStore.renovate(h2);
+        console.log({ ...h2 });
+        updateState(store, 'renovated house', initialState);
       },
     };
   }),
@@ -54,7 +61,8 @@ export const HouseRatingStore = signalStore(
 
 type HouseRatingStore = InstanceType<typeof HouseRatingStore>;
 function getObjFromSignal(store: HouseRatingStore) {
-  const houseToSend: HouseRatingEntry = {
+  const houseToSend: HouseListEntity = {
+    id: store.id(),
     address: store.address(),
     hasAmbiance: store.hasAmbiance(),
     hasFullSizeCandy: store.hasFullSizeCandy(),
