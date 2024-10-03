@@ -1,11 +1,13 @@
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { BookListStore } from './book-list.store';
+import { BookDetailsComponent } from './components/book-details.component';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-books',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [],
+  imports: [BookDetailsComponent, RouterOutlet],
   template: `
     <!--//
     {
@@ -51,6 +53,7 @@ import { BookListStore } from './book-list.store';
         </tbody>
       </table>
     </div>
+    <router-outlet />
   `,
   styles: ``,
 })
