@@ -3,7 +3,7 @@ import books from './books';
 
 const handlers = [
   http.get('/api/books', () => {
-    return HttpResponse.json({ data: books });
+    return HttpResponse.json(books);
   }),
 ];
 
