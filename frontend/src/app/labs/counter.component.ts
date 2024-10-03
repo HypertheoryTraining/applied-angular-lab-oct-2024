@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  signal,
+} from '@angular/core';
 
 @Component({
   selector: 'app-counter',
@@ -19,9 +24,9 @@ import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
         <button class="btn btn-primary" (click)="onIncrement()">+</button>
       </div>
       <div>
-        <p [hidden]="counter()! % 3">Fizz</p>
-        <p [hidden]="counter()! % 3 || counter() % 5">FizzBuzz</p>
-        <p [hidden]="counter()! % 5">Buzz</p>
+        <p [hidden]="isFizz()">Fizz</p>
+        <p [hidden]="isBuzz()">Buzz</p>
+        <p [hidden]="isFizzBuzz()">FizzBuzz</p>
       </div>
     </div>
   `,
@@ -37,4 +42,10 @@ export class CounterComponent {
   onIncrement() {
     this.counter.update((val) => val + 1);
   }
+
+  isFizz = computed(() => this.counter() % 3 !== 0);
+  isBuzz = computed(() => this.counter() % 5 !== 0);
+  isFizzBuzz = computed(
+    () => this.counter() % 3 !== 0 || this.counter() % 5 !== 0
+  );
 }

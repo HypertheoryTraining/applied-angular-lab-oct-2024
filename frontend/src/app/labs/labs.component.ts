@@ -1,15 +1,14 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { CounterComponent } from './counter.component';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-labs',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CounterComponent],
+  imports: [RouterOutlet],
   template: `
     <h2>Labs</h2>
-    <app-counter />
-  `,
+    <router-outlet />  `,
   styles: ``,
 })
 export class LabsComponent {}
