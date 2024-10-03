@@ -17,7 +17,7 @@ import {
   setPending,
   withRequestStatus,
 } from '@shared/request-status.feature';
-import { map, mergeMap, pipe, tap } from 'rxjs';
+import { map, mergeMap, pipe, switchMap, tap } from 'rxjs';
 import {
   HouseListEntity,
   HouseRatingEntry,
@@ -27,6 +27,7 @@ import { RatingsService } from '../services/ratings.service';
 import { getTotalScore } from '../pages/house-rating/utils';
 import { HousePendingStore } from './house-pending.store';
 import { HouseSortAndFilterStore } from './sort-and-filter.store';
+
 
 export const HouseListStore = signalStore(
   withDevtools('house-list'),
@@ -121,6 +122,55 @@ export const HouseListStore = signalStore(
           )
         )
       ),
+      update: rxMethod<HouseRatingEntry>(
+        pipe(
+          map((h) => {
+            const tempId = '1'; //temp hardcode and bring real id here.
+            return [h, tempId] as [HouseRatingEntry, string];
+          }),
+          tap(() => patchState(store, setPending())),
+          tap(([h, id]) => {
+            pendingStore.addHouse({ ...h, id });
+          }),
+          mergeMap(([h, id]) =>
+            service.updateHouseToList(h, id).pipe(
+              tapResponse({
+                next: ([h, tempId]) => {
+                  updateState(
+                    store,
+                    'updating from api',
+                    addEntity(h),
+                    setFulfilled()
+                  );
+                  pendingStore.removeHouse(tempId);
+                },
+                error: (e: HttpErrorResponse) =>
+                  patchState(
+                    store,
+                    setError(`Error - couldn't update house ${e.error}`)
+                  ),
+              })
+            )
+          )
+        )
+      ),  
+      loadById: rxMethod<string>(                
+        pipe(          
+          tap(() => patchState(store, setPending())),          
+          switchMap(() =>            
+            service.getHouseListById('1').pipe( //houseId - temp hardcode and bring real id here.
+              tapResponse({
+                next: (d) => patchState(store, setEntities(d), setFulfilled()),
+                error: () =>
+                  patchState(
+                    store,
+                    setError('Error Getting List - Server Returned Bad Data')
+                  ),
+              })
+            )
+          )
+        )
+      )
     };
   }),
   withHooks({

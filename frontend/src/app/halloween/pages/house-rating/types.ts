@@ -10,6 +10,8 @@ export interface HouseRatingEntry {
 export type HouseListEntity = HouseRatingEntry & { id: string };
 
 export type HouseRatingListItem = HouseListEntity & {
+  minTotalScore: number,
+  maxTotalScore: number,
   totalScore: number;
   isPending: boolean;
 };

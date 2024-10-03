@@ -6,7 +6,7 @@ import {
   withComputed,
   withMethods,
 } from '@ngrx/signals';
-import { addEntity, removeEntity, withEntities } from '@ngrx/signals/entities';
+import { addEntity, removeEntity, updateEntity, withEntities } from '@ngrx/signals/entities';
 import { HouseListEntity } from '../pages/house-rating/types';
 
 export const HousePendingStore = signalStore(
@@ -24,9 +24,14 @@ export const HousePendingStore = signalStore(
       addHouse: (house: HouseListEntity) => {
         patchState(store, addEntity(house));
       },
+      updateHouse: (id: string, house: HouseListEntity) => {
+      // patchState(store, updateEntity(id, house)); //  how to build entityid 
+      // patchState(store, (state) =>({..state, entities:{...state.entityMap, [id]:...state.entityMap.ids,...house }}));       
+        
+      },
       removeHouse: (id: string) => {
         patchState(store, removeEntity(id));
       },
     };
-  })
+  }),
 );
