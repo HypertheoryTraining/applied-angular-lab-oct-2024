@@ -2,8 +2,10 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  inject,
   signal,
 } from '@angular/core';
+import { LabsService } from './labs.service';
 
 @Component({
   selector: 'app-counter',
@@ -34,13 +36,14 @@ import {
 })
 export class CounterComponent {
   counter = signal(4);
+  labService = inject(LabsService);
 
   onDecrement() {
-    this.counter.update((val) => val - 1);
+    this.counter.update((val) => val - this.labService.getCounterValue);
   }
 
   onIncrement() {
-    this.counter.update((val) => val + 1);
+    this.counter.update((val) => val + this.labService.getCounterValue);
   }
 
   isFizz = computed(() => this.counter() % 3 !== 0);
