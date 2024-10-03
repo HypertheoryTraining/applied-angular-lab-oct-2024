@@ -29,7 +29,7 @@ export const HALLOWEEN_ROUTES: Routes = [
           },
           {
             path: 'delete/:id',
-            //component: HouseDeleteComponent, //TO Be Created
+            //component: HouseDeleteComponent, //TBD open a confirmation pop up when the delete button is clicked
           },
         ],
       },
