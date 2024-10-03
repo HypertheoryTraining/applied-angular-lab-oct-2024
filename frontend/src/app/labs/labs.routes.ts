@@ -1,8 +1,9 @@
 import { Routes } from '@angular/router';
 import { LabsComponent } from './labs.component';
-import { CounterComponent } from './counter.component';
-import { PrefsComponent } from './prefs.component';
+import { CounterComponent } from './components/counter.component';
+import { PrefsComponent } from './components/prefs.component';
 import { LabsService } from './labs.service';
+import { BooksComponent } from './components/books.component';
 
 export const LABS_ROUTES: Routes = [
   {
@@ -17,6 +18,10 @@ export const LABS_ROUTES: Routes = [
       {
         path: 'prefs',
         component: PrefsComponent,
+      },
+      {
+        path: 'books',
+        component: BooksComponent,
       },
     ],
   },

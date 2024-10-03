@@ -4,7 +4,7 @@ import {
   inject,
   effect,
 } from '@angular/core';
-import { LabsService } from './labs.service';
+import { LabsService } from '../labs.service';
 
 @Component({
   selector: 'app-prefs',
