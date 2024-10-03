@@ -19,6 +19,8 @@ import { CountStore } from '../stores/count.store';
       {{ amount }}
     </label>
     }
+    <br />
+    <button (click)="store.default()">Reset Default</button>
     <router-outlet></router-outlet>`,
   styles: ``,
 })

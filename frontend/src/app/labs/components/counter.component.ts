@@ -11,6 +11,8 @@ import { CountStore } from '../stores/count.store';
     <button (click)="store.decrease(); store.checkFizzBuzz()">-</button>
     <button (click)="store.increase(); store.checkFizzBuzz()">+</button>
     @if(store.fizz()){<span>Fizz</span>}@if(store.buzz()){<span>Buzz</span>}
+    <br />
+    <button (click)="store.reset(); store.checkFizzBuzz()">Reset Count</button>
     <router-outlet></router-outlet>`,
   styles: ``,
 })

@@ -1,4 +1,11 @@
-import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
+import {
+  patchState,
+  signalStore,
+  watchState,
+  withHooks,
+  withMethods,
+  withState,
+} from '@ngrx/signals';
 
 interface CountStatus {
   currentCount: number;
@@ -40,6 +47,28 @@ export const CountStore = signalStore(
       setIncrement(value: number) {
         patchState(store, { preferredAmount: value });
       },
+      reset() {
+        patchState(store, {
+          currentCount: 0,
+        });
+      },
+      default() {
+        patchState(store, {
+          preferredAmount: 1,
+        });
+      },
     };
+  }),
+  withHooks({
+    onInit(store) {
+      const savedCount = localStorage.getItem('counter-info');
+      if (savedCount) {
+        const loadedCount = JSON.parse(savedCount) as CountStatus;
+        patchState(store, loadedCount);
+      }
+      watchState(store, (status) => {
+        localStorage.setItem('counter-info', JSON.stringify(status));
+      });
+    },
   })
 );
