@@ -8,7 +8,13 @@ import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
   template: `
     <p>Counter: {{ counter() }}</p>
     <div class="flex gap-4">
-      <button class="btn btn-warning" (click)="onDecrement()">-</button>
+      <button
+        class="btn btn-warning"
+        (click)="onDecrement()"
+        [disabled]="counter() === 0"
+      >
+        -
+      </button>
       <button class="btn btn-primary" (click)="onIncrement()">+</button>
     </div>
   `,
@@ -18,7 +24,7 @@ export class CounterComponent {
   counter = signal(4);
 
   onDecrement() {
-    this.counter.update((val) => (val > 0 ? val - 1 : val));
+    this.counter.update((val) => val - 1);
   }
 
   onIncrement() {
