@@ -44,13 +44,13 @@ import { LabsService } from './labs.service';
 })
 export class PrefsComponent {
   labService = inject(LabsService);
+
   constructor() {
     effect(() => console.log(this.labService.getCounterValue));
   }
+
   onChange(tgt: EventTarget | null) {
     const e = tgt as HTMLInputElement;
-    console.log('Changed to ', e.value);
-
     this.labService.setCounterValue(Number(e.value));
   }
 }
