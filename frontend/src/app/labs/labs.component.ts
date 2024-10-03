@@ -10,6 +10,7 @@ import { RouterLink, RouterOutlet } from '@angular/router';
     <h2>Labs</h2>
     <div><a class="btn btn-link" routerLink="counter">Counter</a></div>
     <div><a class="btn btn-link" routerLink="prefs">Preferences</a></div>
+    <div><a class="btn btn-link" routerLink="books">Books</a></div>
     <router-outlet></router-outlet>
   `,
   styles: ``,
