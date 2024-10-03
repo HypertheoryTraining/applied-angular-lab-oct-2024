@@ -1,10 +1,10 @@
 import { Routes } from '@angular/router';
 import { LabsComponent } from './labs.component';
-import { CounterComponent } from '../components/counter.component';
+import { CounterComponent } from './pages/counter/counter.component';
 
 export const LABS_ROUTES: Routes = [
   {
-    path: '',
+    path: 'labs',
     component: LabsComponent,
     children: [
       {

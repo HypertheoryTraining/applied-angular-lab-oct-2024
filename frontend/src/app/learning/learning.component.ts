@@ -8,7 +8,6 @@ import { GolfComponent } from './pages/golf/golf.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterOutlet, RouterLink, GolfComponent],
   template: `
-    <p>Learning Stuff Goes Here</p>
     <ul>
       <li><a class="link" routerLink="golf">Golf Score Thing</a></li>
     </ul>
