@@ -11,6 +11,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
     <div class="flex flex-col">
       <a [routerLink]="'counter'" routerLinkActive="active">Counter</a>
       <a [routerLink]="'prefs'" routerLinkActive="active">PREFS</a>
+      <a [routerLink]="'books'" routerLinkActive="active">Books</a>
     </div>
     <router-outlet />
   `,
