@@ -14,10 +14,10 @@ export const routes: Routes = [
     pathMatch: 'prefix',
     providers: [GolfStore],
     children: [
-      // {
-      //   path: 'dashboard',
-      //   component: DashboardComponent,
-      // },
+      {
+        path: 'dashboard',
+        component: DashboardComponent,
+      },
       ...LEARNING_ROUTES,
       {
         path: 'halloween',

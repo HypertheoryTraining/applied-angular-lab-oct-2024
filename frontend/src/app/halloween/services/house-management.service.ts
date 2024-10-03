@@ -48,13 +48,17 @@ interface WeirdResponse {
 }
 // watch this space.
 @Injectable()
-export class RatingsService {
+export class HouseManagementService {
   #http = inject(HttpClient);
 
   addHouseToList(house: HouseRatingEntry, tempId: string) {
     return this.#http
       .post<HouseListEntity>('/api/houses', house)
       .pipe(map((r) => [r, tempId] as [HouseListEntity, string]));
+  }
+
+  deleteHouseFromList(Id: string) {
+    return this.#http.delete(`/api/houses/${Id}`).pipe(map(() => Id));
   }
 
   getHouseList() {

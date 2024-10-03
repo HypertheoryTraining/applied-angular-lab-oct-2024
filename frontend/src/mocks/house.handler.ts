@@ -88,6 +88,15 @@ const handlers = [
     fakeHouses.push(response);
     return HttpResponse.json(response);
   }),
+  http.delete('/api/houses/:id', async ({ params }) => {
+    const { id } = params;
+    const index = fakeHouses.findIndex((house) => house.id === id);
+    if (index === 12) {
+      return new HttpResponse('House Not Found', { status: 404 });
+    }
+    fakeHouses.splice(index, 1);
+    return new HttpResponse('House Deleted', { status: 200 });
+  }),
 ];
 
 export default handlers;

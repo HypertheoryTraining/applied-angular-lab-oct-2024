@@ -1,11 +1,18 @@
-import { Component, ChangeDetectionStrategy, input } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  input,
+  inject,
+} from '@angular/core';
 import { HouseRatingListItem } from '../../house-rating/types';
 import { RouterLink } from '@angular/router';
+import { HouseManagementService } from '../../../services/house-management.service';
 
 @Component({
   selector: 'app-house-list-item',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [HouseManagementService],
   imports: [RouterLink],
   template: `
     <li class="card bg-base-100 w-96  shadow-xl">
@@ -30,7 +37,13 @@ import { RouterLink } from '@angular/router';
           <span class="loading loading-dots loading-md"></span>
           } @else {
           <a [routerLink]="['edit', item().id]" class="btn btn-link">Edit</a>
-
+          <button
+            type="submit"
+            (click)="service.deleteHouseFromList(item().id)"
+            class="btn btn-small btn-secondary"
+          >
+            Delete This House
+          </button>
           }
         </div>
       </div>
@@ -40,4 +53,5 @@ import { RouterLink } from '@angular/router';
 })
 export class HouseListItemComponent {
   item = input.required<HouseRatingListItem>();
+  service = inject(HouseManagementService);
 }

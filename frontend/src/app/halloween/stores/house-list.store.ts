@@ -8,8 +8,14 @@ import {
   withComputed,
   withHooks,
   withMethods,
+  withState,
 } from '@ngrx/signals';
-import { addEntity, setEntities, withEntities } from '@ngrx/signals/entities';
+import {
+  addEntity,
+  removeEntity,
+  setEntities,
+  withEntities,
+} from '@ngrx/signals/entities';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import {
   setError,
@@ -23,7 +29,7 @@ import {
   HouseRatingEntry,
   HouseRatingListItem,
 } from '../pages/house-rating/types';
-import { RatingsService } from '../services/ratings.service';
+import { HouseManagementService } from '../services/house-management.service';
 import { getTotalScore } from '../pages/house-rating/utils';
 import { HousePendingStore } from './house-pending.store';
 import { HouseSortAndFilterStore } from './sort-and-filter.store';
@@ -32,10 +38,21 @@ export const HouseListStore = signalStore(
   withDevtools('house-list'),
   withRequestStatus(),
   withEntities<HouseListEntity>(),
+  withState<{ selectedHouse: string | undefined }>({
+    selectedHouse: undefined,
+  }),
   withComputed((store) => {
     const pendingStore = inject(HousePendingStore);
     const sortStore = inject(HouseSortAndFilterStore);
     return {
+      getSelectedHouse: computed(() => {
+        const selectedId = store.selectedHouse();
+        if (selectedId) {
+          return store.entityMap()[selectedId];
+        } else {
+          return undefined;
+        }
+      }),
       getHouseListModel: computed(() => {
         const combined = [
           ...store.entities(),
@@ -69,9 +86,10 @@ export const HouseListStore = signalStore(
     };
   }),
   withMethods((store) => {
-    const service = inject(RatingsService);
+    const service = inject(HouseManagementService);
     const pendingStore = inject(HousePendingStore);
     return {
+      setCurrent: (id: string) => patchState(store, { selectedHouse: id }),
       _load: rxMethod<void>(
         pipe(
           tap(() => patchState(store, setPending())),
@@ -115,6 +133,30 @@ export const HouseListStore = signalStore(
                   patchState(
                     store,
                     setError(`Error - couldn't add house ${e.error}`)
+                  ),
+              })
+            )
+          )
+        )
+      ),
+      delete: rxMethod<string>(
+        pipe(
+          tap(() => patchState(store, setPending())),
+          mergeMap((id) =>
+            service.deleteHouseFromList(id).pipe(
+              tapResponse({
+                next: (deletedId) => {
+                  updateState(
+                    store,
+                    'deleting from api',
+                    removeEntity(deletedId),
+                    setFulfilled()
+                  );
+                },
+                error: (e: HttpErrorResponse) =>
+                  patchState(
+                    store,
+                    setError(`Error - couldn't delete house ${e.error}`)
                   ),
               })
             )
