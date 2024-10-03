@@ -8,13 +8,17 @@ import {
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs';
+import { TimelineComponent } from './timeline.component';
+import { Book } from '../book.interface';
 
 @Component({
   selector: 'app-books',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [JsonPipe],
+  imports: [JsonPipe, TimelineComponent],
   template: `
+    <app-timeline [books]="books()" />
+
     <div class="overflow-x-auto">
       <table class="table">
         <!-- head -->
@@ -56,10 +60,3 @@ export class BooksComponent {
     ) as unknown as Signal<Book[]>;
   }
 }
-
-type Book = {
-  id: string;
-  title: string;
-  author: string;
-  year: number;
-};
