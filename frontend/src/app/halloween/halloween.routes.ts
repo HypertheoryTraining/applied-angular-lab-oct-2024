@@ -27,6 +27,10 @@ export const HALLOWEEN_ROUTES: Routes = [
             path: 'edit/:id',
             component: HouseEditComponent,
           },
+          {
+            path: 'delete/:id',
+            //component: HouseDeleteComponent, //TO Be Created
+          },
         ],
       },
       {
