@@ -29,3 +29,18 @@ export class DecrementButtonDirective {
     );
   }
 }
+
+@Directive({
+  standalone: true,
+  selector: 'button[appPreferenceButton]',
+})
+export class PreferenceButtonDirective {
+  constructor(el: ElementRef<HTMLButtonElement>) {
+    el.nativeElement.classList.add(
+      'btn',
+      'btn-sm',
+      'btn-circle',
+      'btn-warning'
+    );
+  }
+}
