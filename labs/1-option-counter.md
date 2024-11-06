@@ -1,10 +1,14 @@
 # Counter
 
-No Signal Store, No API, Just use Signals.
-
 ## Sprint 1 - Easy Mode
 
-In the `Labs` folder create another component called "counter.component.ts" in the components folder.
+Create a new folder in `src/app` called `counter`.
+
+Create an Angular component in that folder called `counter.component.ts`.
+
+```typescript
+export class TacoSalad {}
+```
 
 In the `labs.routes.ts' add a child route to the labs to get to your new component.
 
