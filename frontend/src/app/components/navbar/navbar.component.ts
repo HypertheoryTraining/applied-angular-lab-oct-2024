@@ -70,8 +70,8 @@ export class NavbarComponent {
       text: 'Halloween Tracker',
     },
     {
-      path: '/labs',
-      text: 'Labs',
+      path: '/books',
+      text: 'Books',
     },
   ];
   userStore = inject(UserStore);

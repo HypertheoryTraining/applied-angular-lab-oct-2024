@@ -28,10 +28,10 @@ export const routes: Routes = [
           ),
       },
       {
-        path: 'labs',
+        path: 'books',
         canActivate: [userLoggedInGuard()],
         loadChildren: () =>
-          import('./labs/labs.routes').then((r) => r.LABS_ROUTES),
+          import('./labs/book.routes').then((r) => r.BOOKS_ROUTES),
       },
       {
         // a catchall has to be last.
