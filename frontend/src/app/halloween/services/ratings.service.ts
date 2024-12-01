@@ -57,6 +57,14 @@ export class RatingsService {
       .pipe(map((r) => [r, tempId] as [HouseListEntity, string]));
   }
 
+  renovateHouse(house: HouseListEntity) {
+    return this.#http.put<HouseListEntity>('/api/houses', house);
+  }
+
+  deleteHouse(id: string) {
+    return this.#http.delete(`/api/houses?id=${id}`);
+  }
+
   getHouseList() {
     return this.#http
       .get<HouseListEntity[]>('/api/houses')

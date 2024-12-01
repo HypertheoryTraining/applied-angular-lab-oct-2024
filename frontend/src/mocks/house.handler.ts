@@ -4,7 +4,7 @@ import {
   HouseRatingEntry,
 } from '../app/halloween/pages/house-rating/types';
 
-const fakeHouses: HouseListEntity[] = [
+let fakeHouses: HouseListEntity[] = [
   {
     id: '1',
     address: '1212 Mockingbird Court',
@@ -55,28 +55,14 @@ const fakeHouses: HouseListEntity[] = [
   },
 ];
 
-const weirdData = [
-  {
-    id: '1',
-    address: {
-      street: '506 Reed',
-      city: 'Akron',
-      state: 'Oh',
-    },
-    ratings: {
-      ambiance: 3,
-      candy: 4,
-    },
-    qualityRating: 3,
-    quantityRating: 4,
-  },
-];
-
 const handlers = [
   http.get('/api/houses', async () => {
-    //return HttpResponse.json([{ name: 'Brad' }, { name: 'Sarah' }]);
-    //return HttpResponse.json(weirdData);
     return HttpResponse.json(fakeHouses);
+  }),
+  http.delete('/api/houses', async ({ request }) => {
+    const id = new URL(request.url).searchParams.get('id');
+    fakeHouses = fakeHouses.filter((h) => h.id !== id);
+    return HttpResponse.json();
   }),
   http.post('/api/houses', async ({ request }) => {
     const data = (await request.json()) as unknown as HouseRatingEntry;
@@ -85,6 +71,17 @@ const handlers = [
       return new HttpResponse('Address Not Found', { status: 400 });
     }
     const response = { id: crypto.randomUUID(), ...data };
+    fakeHouses.push(response);
+    return HttpResponse.json(response);
+  }),
+  http.put('/api/houses', async ({ request }) => {
+    const data = (await request.json()) as unknown as HouseListEntity;
+    await delay(data.address.length * 1000);
+    if (data.address === 'prospect') {
+      return new HttpResponse('Address Not Found', { status: 400 });
+    }
+    const response = data;
+    fakeHouses = fakeHouses.filter((h) => h.id !== data.id);
     fakeHouses.push(response);
     return HttpResponse.json(response);
   }),

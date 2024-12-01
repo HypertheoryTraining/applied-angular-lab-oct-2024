@@ -5,8 +5,10 @@ import { HouseListComponent } from './pages/house-list/house-list.component';
 import { HouseRatingComponent } from './pages/house-rating/house-rating.component';
 import { RatingsService } from './services/ratings.service';
 import { HousePendingStore } from './stores/house-pending.store';
-import { HouseEditComponent } from './pages/house-rating/house-edit.component';
+import { HouseRenovateComponent } from './pages/house-rating/house-renovate.component';
 import { HouseSortAndFilterStore } from './stores/sort-and-filter.store';
+import { HouseRatingStore } from './pages/house-rating/house-rating.store';
+import { HouseDeleteComponent } from './pages/house-rating/house-delete.component';
 
 export const HALLOWEEN_ROUTES: Routes = [
   {
@@ -16,6 +18,7 @@ export const HALLOWEEN_ROUTES: Routes = [
       RatingsService,
       HousePendingStore,
       HouseSortAndFilterStore,
+      HouseRatingStore,
     ],
     component: HalloweenComponent,
     children: [
@@ -24,8 +27,12 @@ export const HALLOWEEN_ROUTES: Routes = [
         component: HouseListComponent,
         children: [
           {
-            path: 'edit/:id',
-            component: HouseEditComponent,
+            path: 'renovate/:id',
+            component: HouseRenovateComponent,
+          },
+          {
+            path: 'delete/:id',
+            component: HouseDeleteComponent,
           },
         ],
       },
