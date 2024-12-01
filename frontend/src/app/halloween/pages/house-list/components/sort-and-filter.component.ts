@@ -10,7 +10,11 @@ import { HouseSortAndFilterStore } from '../../../stores/sort-and-filter.store';
     <div class="container w-full">
       <div class="flex justify-between items-center w-full min-w-full">
         <div class="">
+          <label class="label-text pr-28" for="range"
+            >Range: {{ store.scoreFilter() }}</label
+          >
           <input
+            id="range"
             #score
             type="range"
             min="1"

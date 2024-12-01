@@ -1,6 +1,7 @@
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { GolfStore } from '@shared/golf.store';
 import { UserStore } from '@shared/user.store';
+import { HouseListStore } from '../halloween/stores/house-list.store';
 
 @Component({
   selector: 'app-dashboard',
@@ -27,4 +28,5 @@ import { UserStore } from '@shared/user.store';
 export class DashboardComponent {
   golfStore = inject(GolfStore);
   userStore = inject(UserStore);
+  houseListStore = inject(HouseListStore);
 }

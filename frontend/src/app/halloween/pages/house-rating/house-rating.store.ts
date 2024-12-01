@@ -38,6 +38,10 @@ export const HouseRatingStore = signalStore(
         houseListStore.add(h2);
         updateState(store, 'added house', initialState);
       },
+      delete() {
+        houseListStore.delete('1'); //updated the hardcoded value
+        updateState(store, 'deleted house', initialState);
+      },
     };
   }),
   withComputed((store) => {

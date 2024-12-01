@@ -3,7 +3,7 @@ import { HalloweenComponent } from './halloween.component';
 import { HouseListStore } from './stores/house-list.store';
 import { HouseListComponent } from './pages/house-list/house-list.component';
 import { HouseRatingComponent } from './pages/house-rating/house-rating.component';
-import { RatingsService } from './services/ratings.service';
+import { HouseManagementService } from './services/house-management.service';
 import { HousePendingStore } from './stores/house-pending.store';
 import { HouseEditComponent } from './pages/house-rating/house-edit.component';
 import { HouseSortAndFilterStore } from './stores/sort-and-filter.store';
@@ -13,7 +13,7 @@ export const HALLOWEEN_ROUTES: Routes = [
     path: '',
     providers: [
       HouseListStore,
-      RatingsService,
+      HouseManagementService,
       HousePendingStore,
       HouseSortAndFilterStore,
     ],
@@ -26,6 +26,10 @@ export const HALLOWEEN_ROUTES: Routes = [
           {
             path: 'edit/:id',
             component: HouseEditComponent,
+          },
+          {
+            path: 'delete/:id',
+            //component: HouseDeleteComponent, //TBD open a confirmation pop up when the delete button is clicked
           },
         ],
       },
