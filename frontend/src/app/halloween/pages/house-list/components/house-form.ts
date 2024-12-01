@@ -8,19 +8,18 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { HouseRatingStore } from './house-rating.store';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { HouseFormComponent } from "../house-list/components/house-form";
+import { HouseRatingStore } from '../../house-rating/house-rating.store';
 
 @Component({
-  selector: 'app-house-edit',
+  selector: 'app-house-form',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ReactiveFormsModule, HouseFormComponent],
+  imports: [ReactiveFormsModule],
   providers: [HouseRatingStore],
   template: `<dialog open id="my_modal_3" #modal class="modal">
     <div class="modal-box w-full h-full">
-      <form method="dialog">
+    <form method="dialog">
         <button
           (click)="close()"
           class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
@@ -28,11 +27,8 @@ import { HouseFormComponent } from "../house-list/components/house-form";
           ✕
         </button>
       </form>
-      <!-- To DO - Move this as a component to reuse in both add and edit -->
-      <h3 class="text-lg font-bold">Edit the House</h3>
-      <p class="py-4">You could edit house {{ id }} here.</p>
+      <!-- reusable component -->
       <div class="flex flex-row min-h-screen justify-center ">
-       <!--  <app-house-form /> -->
       <form [formGroup]="form" (ngSubmit)="edit()">
         <p class="text-3xl font-black">House Rating</p>
         <div class="form-control">
@@ -110,8 +106,12 @@ import { HouseFormComponent } from "../house-list/components/house-form";
             <div class="stat-value text-primary">{{ store.totalScore() }}</div>
           </div>
         </div>
-        <div>
+        <div >
+        @if(id) {
           <button type="submit" class="btn btn-primary">Update This House Info</button>
+        }@else {
+            <button type="submit" class="btn btn-primary">Add This House</button>
+        }
         </div>
       </form>
     </div>
@@ -120,7 +120,7 @@ import { HouseFormComponent } from "../house-list/components/house-form";
   </dialog>`,
   styles: ``,
 })
-export class HouseEditComponent implements OnInit {
+export class HouseFormComponent implements OnInit {
   @Input() id = '';
   @ViewChild('modal') modal!: ElementRef;
   store = inject(HouseRatingStore);
@@ -136,13 +136,21 @@ export class HouseEditComponent implements OnInit {
     console.log('Editing house with id:', this.id);
     this.store.loadById(this.id);
   }
+
+  edit() {
+    if (this.form.valid) {      
+      this.store.addEdit(this.id);
+      this.form.reset();
+    }
+  }
   close() {
     this.modal.nativeElement.close();
     this.location.back();
   }
-  edit() {
-    if (this.form.valid) {      
-      this.store.addEdit(this.id);
+
+  add() {
+    if (this.form.valid) {
+      this.store.addEdit('0');
       this.form.reset();
     }
   }

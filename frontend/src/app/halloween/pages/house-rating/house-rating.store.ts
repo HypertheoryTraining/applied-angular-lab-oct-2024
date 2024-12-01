@@ -33,11 +33,18 @@ export const HouseRatingStore = signalStore(
       ) {
         updateState(store, `toggled ${key}`, { [key]: !store[key]() });
       },
-      add() {
+      addEdit(id: string) {
         const h2 = getObjFromSignal(store as unknown as HouseRatingStore);
         houseListStore.add(h2);
-        updateState(store, 'added house', initialState);
+        if(id === '0'){
+          updateState(store, 'added house', initialState);          
+        }else{
+          updateState(store, 'update house', initialState); // need to update this initialState with form values to update
+        }        
       },
+      loadById(id: string) {        
+        houseListStore.loadById(id);
+      }
     };
   }),
   withComputed((store) => {
@@ -48,6 +55,14 @@ export const HouseRatingStore = signalStore(
         const obj = getObjFromSignal(store as unknown as HouseRatingStore);
         return getTotalScore(obj);
       }),
+      // minTotalScore: computed(() => {
+      //   const obj = getObjFromSignal(store as unknown as HouseRatingStore);
+      //   return Math.min(getTotalScore(obj));
+      // }),      
+      // maxTotalScore: computed(() => {
+      //   const obj = getObjFromSignal(store as unknown as HouseRatingStore);
+      //   return Math.max(getMaxTotalScore(obj));
+      // }),
     };
   })
 );

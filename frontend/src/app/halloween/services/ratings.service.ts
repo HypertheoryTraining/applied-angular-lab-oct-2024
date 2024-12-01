@@ -57,9 +57,21 @@ export class RatingsService {
       .pipe(map((r) => [r, tempId] as [HouseListEntity, string]));
   }
 
+  updateHouseToList(house: HouseRatingEntry, tempId: string) {
+    return this.#http
+      .post<HouseListEntity>('/api/houses/$id', house)
+      .pipe(map((r) => [r, tempId] as [HouseListEntity, string]));
+  }
+
   getHouseList() {
     return this.#http
       .get<HouseListEntity[]>('/api/houses')
+      .pipe(parseResponse(HouseResponseSchema));
+  }
+
+  getHouseListById(id: string) {
+    return this.#http
+      .get<HouseListEntity[]>('/api/houses/$id')
       .pipe(parseResponse(HouseResponseSchema));
   }
 }
