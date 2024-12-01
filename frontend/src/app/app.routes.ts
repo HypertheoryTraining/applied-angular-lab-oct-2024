@@ -29,7 +29,7 @@ export const routes: Routes = [
       },
       {
         path: 'labs',
-        canActivate: [userLoggedInGuard()],
+        canActivate: [],
         loadChildren: () =>
           import('./labs/labs.routes').then((r) => r.LABS_ROUTES),
       },
