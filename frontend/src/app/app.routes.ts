@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { GolfStore } from '@shared/golf.store';
+import { CounterStore } from '@shared/counter.store';
 import { LEARNING_ROUTES } from './learning/routes';
 import { DashboardComponent } from './pages/dashboard.component';
 import { HomeComponent } from './pages/home.component';
@@ -12,7 +13,7 @@ export const routes: Routes = [
 
     component: HomeComponent,
     pathMatch: 'prefix',
-    providers: [GolfStore],
+    providers: [GolfStore, CounterStore],
     children: [
       // {
       //   path: 'dashboard',
